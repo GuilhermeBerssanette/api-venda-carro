@@ -47,12 +47,67 @@ const getUserById = async (id) => {
         error.statusCode = 404
         throw error
     }
+    return user
+}
+
+const searchUsersByName = async (name) => {
+     const users = await User.find({
+        nome: { $regex: name, $options: "i" }
+     })
+
+     return users
+}
+
+const deleteUser = async (id) => {
+    const user = await User.findByIdAndDelete(id)
+
+    if (!user) {
+        const error = new Error("Usuário não encontrado")
+        error.statusCode = 404
+        throw error
+    }
 
     return user
+}
+
+const getUserByEmail = async (email) => {
+    const user = await User.findOne({ email: email })
+
+    if (!user) {
+        const error = new Error("Usuário não encontrado")
+        error.statusCode = 404
+        throw error
+    }
+
+    return user
+}
+
+const updateUser = async (id, data) => {
+    const user = await User.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true
+    })
+
+    if (!user) {
+        const error = new Error("Usuário não encontrado")
+        error.statusCode = 404
+        throw error
+    }
+
+    return user
+}
+
+const countUsers = async () => {
+    return User.countDocuments()
 }
 
 export default {
     createUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    searchUsersByName,
+    deleteUser,
+    getUserByEmail,
+    updateUser,
+    countUsers
 }

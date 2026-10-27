@@ -32,7 +32,7 @@ const getUserById = async (req, res, next) => {
     try {
         const user = await userService.getUserById(req.params.id)
 
-        rea.status(200).json({
+        res.status(200).json({
             message: "Usuário encontrado com sucesso",
             data: user
         })
@@ -41,8 +41,81 @@ const getUserById = async (req, res, next) => {
     }
 }
 
+const searchUsersByName = async (req, res, next) => {
+    try {
+        const users = await userService.searchUsersByName(req.params.name)
+
+        res.status(200).json({
+            message: "Usuarios encontrados com sucesso",
+            total: users.length,
+            data: users
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteUser = async (req, res, next) => {
+    try {
+        const user = await userService.deleteUser(req.params.id)
+
+        res.status(200).json({
+            message: "Usuário deletado com sucesso",
+            data: user
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getUserByEmail = async (req, res, next) => {
+    try {
+        const user  = await userService.getUserByEmail(req.params.email)
+
+        res.status(200).json({
+            message: "Usuário encontrado com sucesso",
+            data: user
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updateUser = async (req, res, next) => {
+    try { 
+        const user = await userService.updateUser(req.params.id, req.body)
+
+        res.status(200).json({
+            message: "Usuário editado com sucesso",
+            data: user
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const countUsers = async (req, res, next) => {
+    try {
+        const total = await userService.countUsers()
+
+        res.status(200).json({
+            message: "Quantidade de usuarios encontrada com sucesso",
+            total
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     createUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    searchUsersByName,
+    deleteUser,
+    getUserByEmail,
+    updateUser,
+    countUsers
 }
